@@ -2,6 +2,7 @@ import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { About } from "@/components/about"
 import { Products } from "@/components/products"
+import { Packaging } from "@/components/packaging"
 import { QuoteCalculator } from "@/components/quote-calculator"
 import { Process } from "@/components/process"
 import { Gallery } from "@/components/gallery"
@@ -24,6 +25,10 @@ export default function Home() {
         
         <ScrollReveal animation="fade-in">
           <Products />
+        </ScrollReveal>
+
+        <ScrollReveal animation="slide-up">
+          <Packaging />
         </ScrollReveal>
         
         <ScrollReveal animation="slide-up">

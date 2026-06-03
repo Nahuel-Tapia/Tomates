@@ -23,8 +23,8 @@ const products: Product[] = [
     name: "Tomates Frescos Orgánicos",
     baseDescription: "Tomates de mesa seleccionados a mano, madurados al sol.",
     packagingOptions: [
-      { id: "cajon-10kg", name: "Cajón de Madera (10 kg)", price: 250, unit: "cajón" },
-      { id: "caja-5kg", name: "Caja de Cartón Premium (5 kg)", price: 140, unit: "caja" },
+      { id: "cajon-10kg", name: "Cajón de Madera (10 kg)", price: 12000, unit: "cajón" },
+      { id: "caja-5kg", name: "Caja de Cartón Premium (5 kg)", price: 7000, unit: "caja" },
     ],
   },
   {
@@ -32,8 +32,8 @@ const products: Product[] = [
     name: "Salsa Artesanal de Tomate",
     baseDescription: "Elaborada con receta tradicional, libre de conservadores.",
     packagingOptions: [
-      { id: "caja-6salsas", name: "Caja de 6 Envases (500ml c/u)", price: 360, unit: "caja" },
-      { id: "salsa-individual", name: "Envase Individual (500ml)", price: 65, unit: "envase" },
+      { id: "caja-6salsas", name: "Caja de 6 Envases (500ml c/u)", price: 18000, unit: "caja" },
+      { id: "salsa-individual", name: "Envase Individual (500ml)", price: 3500, unit: "envase" },
     ],
   },
   {
@@ -41,8 +41,8 @@ const products: Product[] = [
     name: "Tomates Cherry Orgánicos",
     baseDescription: "Pequeños, dulces y crujientes. Perfectos para ensaladas gourmet.",
     packagingOptions: [
-      { id: "caja-12cherry", name: "Caja de 12 Clamshells (250g c/u)", price: 300, unit: "caja" },
-      { id: "cherry-granel", name: "A Granel (5 kg)", price: 220, unit: "caja" },
+      { id: "caja-12cherry", name: "Caja de 12 Clamshells (250g c/u)", price: 15000, unit: "caja" },
+      { id: "cherry-granel", name: "A Granel (5 kg)", price: 10500, unit: "caja" },
     ],
   },
 ]
@@ -95,7 +95,7 @@ export function QuoteCalculator() {
   else if (frequency === "quincenal") frequencyDiscountPercent = 5
 
   const totalDiscountPercent = Math.min(30, discountPercent + frequencyDiscountPercent) // Cap at 30%
-  const discountAmount = basePrice * (totalDiscountPercent / 100)
+  const discountAmount = Math.round(basePrice * (totalDiscountPercent / 100))
   const finalPrice = basePrice - discountAmount
 
   const handleSendToContact = () => {
@@ -105,7 +105,7 @@ export function QuoteCalculator() {
       `- Cantidad: ${quantity} unidades\n` +
       `- Tipo de Cliente: ${clientTypeLabels[clientType]}\n` +
       `- Frecuencia de envío: ${frequencyLabels[frequency]}\n\n` +
-      `Estimado preliminar calculado: $${finalPrice.toLocaleString("es-MX", { minimumFractionDigits: 2 })} MXN (con ${totalDiscountPercent}% de descuento total aplicado).\n\n` +
+      `Estimado preliminar calculado: $${finalPrice.toLocaleString("es-CL", { minimumFractionDigits: 0, maximumFractionDigits: 0 })} CLP (con ${totalDiscountPercent}% de descuento total aplicado).\n\n` +
       `Por favor, pónganse en contacto conmigo para acordar condiciones de entrega y método de pago.`;
 
     const event = new CustomEvent("setQuoteMessage", {
@@ -185,7 +185,7 @@ export function QuoteCalculator() {
                     <div>
                       <span className="block font-semibold text-sm text-foreground">{option.name}</span>
                       <span className="block text-xs mt-1 text-primary font-medium">
-                        ${option.price} MXN / {option.unit}
+                        ${option.price.toLocaleString("es-CL")} CLP / {option.unit}
                       </span>
                     </div>
                     {selectedPackIdx === idx && (
@@ -318,7 +318,7 @@ export function QuoteCalculator() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-background/70">Precio unitario:</span>
-                  <span className="font-medium">${pack.price} MXN</span>
+                  <span className="font-medium">${pack.price.toLocaleString("es-CL")} CLP</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-background/70">Cantidad:</span>
@@ -326,7 +326,7 @@ export function QuoteCalculator() {
                 </div>
                 <div className="flex justify-between border-t border-background/10 pt-4">
                   <span className="text-background/70">Subtotal:</span>
-                  <span className="font-medium">${basePrice.toLocaleString("es-MX")} MXN</span>
+                  <span className="font-medium">${basePrice.toLocaleString("es-CL")} CLP</span>
                 </div>
 
                 {totalDiscountPercent > 0 && (
@@ -334,7 +334,7 @@ export function QuoteCalculator() {
                     <span className="flex items-center gap-1">
                       Descuento ({totalDiscountPercent}%):
                     </span>
-                    <span>-${discountAmount.toLocaleString("es-MX", { maximumFractionDigits: 2 })} MXN</span>
+                    <span>-${discountAmount.toLocaleString("es-CL")} CLP</span>
                   </div>
                 )}
               </div>
@@ -346,9 +346,9 @@ export function QuoteCalculator() {
                 <span className="text-base text-background/80 font-serif">Total Estimado:</span>
                 <div className="text-right">
                   <span className="text-3xl sm:text-4xl font-serif font-bold text-primary-foreground">
-                    ${finalPrice.toLocaleString("es-MX", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    ${finalPrice.toLocaleString("es-CL")}
                   </span>
-                  <span className="block text-[10px] text-background/50">MXN + Envío a cotizar</span>
+                  <span className="block text-[10px] text-background/50">CLP + Envío a cotizar</span>
                 </div>
               </div>
 
