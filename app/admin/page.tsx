@@ -15,6 +15,59 @@ interface Quote {
   status: "pendiente" | "contactado"
 }
 
+const initialMockQuotes: Quote[] = [
+  {
+    id: "mock-1",
+    name: "Sofía Rodríguez (Chef - El Mangrullo)",
+    email: "srodriguez@elmangrullo.com.ar",
+    phone: "+54 341 9876 543",
+    type: "restaurante",
+    message: "Hola Huerta Dorada, me interesa solicitar una cotización personalizada con los siguientes detalles:\n\n- Producto: Tomates Frescos Orgánicos\n- Presentación: Cajón de Madera (10 kg)\n- Cantidad: 15 unidades\n- Tipo de Cliente: Restaurante / Cafetería\n- Frecuencia de envío: Semanal (10% desc. extra)\n\nEstimado preliminar calculado: $175.500 ARS (con 22% de descuento total aplicado).",
+    date: new Date(Date.now() - 3600000 * 2).toISOString(),
+    status: "pendiente"
+  },
+  {
+    id: "mock-2",
+    name: "Distribuidora Cuyo S.A. (Martín Gómez)",
+    email: "compras@distribuidoracuyo.com.ar",
+    phone: "+54 261 456 7890",
+    type: "mayorista",
+    message: "Hola Huerta Dorada, me interesa solicitar una cotización personalizada con los siguientes detalles:\n\n- Producto: Tomates Cherry Orgánicos\n- Presentación: A Granel (5 kg)\n- Cantidad: 50 unidades\n- Tipo de Cliente: Distribuidor / Mayorista\n- Frecuencia de envío: Mensual\n\nEstimado preliminar calculado: $560.000 ARS (con 20% de descuento total aplicado).",
+    date: new Date(Date.now() - 3600000 * 5).toISOString(),
+    status: "pendiente"
+  },
+  {
+    id: "mock-3",
+    name: "Pizzería Nápoles (Gastón Silva)",
+    email: "contacto@pizzerianapoles.com.ar",
+    phone: "+54 11 3222 4455",
+    type: "restaurante",
+    message: "Hola Huerta Dorada, me interesa solicitar una cotización personalizada con los siguientes detalles:\n\n- Producto: Salsa Artesanal de Tomate\n- Presentación: Caja de 6 Envases (500ml c/u)\n- Cantidad: 8 unidades\n- Tipo de Cliente: Restaurante / Cafetería\n- Frecuencia de envío: Semanal (10% desc. extra)\n\nEstimado preliminar calculado: $149.760 ARS (con 22% de descuento total aplicado).",
+    date: new Date(Date.now() - 3600000 * 24).toISOString(),
+    status: "contactado"
+  },
+  {
+    id: "mock-4",
+    name: "Juan Pérez",
+    email: "juan.perez@gmail.com",
+    phone: "+54 11 5432 1098",
+    type: "particular",
+    message: "Hola Huerta Dorada, me interesa solicitar una cotización personalizada con los siguientes detalles:\n\n- Producto: Tomates Cherry Orgánicos\n- Presentación: Caja de 12 Clamshells (250g c/u)\n- Cantidad: 3 unidades\n- Tipo de Cliente: Particular / Hogar\n- Frecuencia de envío: Pedido único\n\nEstimado preliminar calculado: $60.000 ARS (con 0% de descuento total aplicado).",
+    date: new Date(Date.now() - 3600000 * 48).toISOString(),
+    status: "pendiente"
+  },
+  {
+    id: "mock-5",
+    name: "Agustina Bianchi",
+    email: "agustina@bianchi.me",
+    phone: "+54 9 261 555 9911",
+    type: "particular",
+    message: "Hola Huerta Dorada, me interesa solicitar una cotización personalizada con los siguientes detalles:\n\n- Producto: Salsa Artesanal de Tomate\n- Presentación: Envase Individual (500ml)\n- Cantidad: 2 unidades\n- Tipo de Cliente: Particular / Hogar\n- Frecuencia de envío: Pedido único\n\nEstimado preliminar calculado: $9.000 ARS (con 0% de descuento total aplicado).",
+    date: new Date(Date.now() - 3600000 * 72).toISOString(),
+    status: "contactado"
+  }
+]
+
 export default function AdminPage() {
   const [mounted, setMounted] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -43,8 +96,12 @@ export default function AdminPage() {
   const loadQuotes = () => {
     try {
       const stored = localStorage.getItem("huerta_dorada_quotes")
-      if (stored) {
+      if (stored && JSON.parse(stored).length > 0) {
         setQuotes(JSON.parse(stored))
+      } else {
+        // Automatically populate with mock quotes if empty
+        setQuotes(initialMockQuotes)
+        localStorage.setItem("huerta_dorada_quotes", JSON.stringify(initialMockQuotes))
       }
     } catch (e) {
       console.error("Failed to load quotes:", e)
@@ -86,32 +143,9 @@ export default function AdminPage() {
   }
 
   const handleResetData = () => {
-    if (confirm("¿Deseas restaurar los datos de simulación iniciales? Esto borrará tus registros actuales.")) {
-      // Inyectar datos de simulación
-      const mockQuotes: Quote[] = [
-        {
-          id: "mock-1",
-          name: "María Belén González",
-          email: "maria.gonzalez@lacocina.cl",
-          phone: "+56 9 1234 5678",
-          type: "restaurante",
-          message: "Hola Huerta Dorada, me interesa solicitar una cotización personalizada con los siguientes detalles:\n\n- Producto: Salsa Artesanal de Tomate\n- Presentación: Caja de 6 Envases (500ml c/u)\n- Cantidad: 12 unidades\n- Tipo de Cliente: Restaurante / Cafetería\n- Frecuencia de envío: Semanal (10% desc. extra)\n\nEstimado preliminar calculado: $244.800 ARS (con 22% de descuento total aplicado).",
-          date: new Date(Date.now() - 3600000 * 2).toISOString(),
-          status: "pendiente"
-        },
-        {
-          id: "mock-2",
-          name: "Carlos Mendoza",
-          email: "carlos.mendoza@superdelvalle.com",
-          phone: "+54 11 9876 5432",
-          type: "mayorista",
-          message: "Hola Huerta Dorada, me interesa solicitar una cotización personalizada con los siguientes detalles:\n\n- Producto: Tomates Frescos Orgánicos\n- Presentación: Cajón de Madera (10 kg)\n- Cantidad: 40 unidades\n- Tipo de Cliente: Distribuidor / Mayorista\n- Frecuencia de envío: Quincenal (5% desc. extra)\n\nEstimado preliminar calculado: $450.000 ARS (con 25% de descuento total aplicado).",
-          date: new Date(Date.now() - 3600000 * 24).toISOString(),
-          status: "contactado"
-        }
-      ]
-      setQuotes(mockQuotes)
-      localStorage.setItem("huerta_dorada_quotes", JSON.stringify(mockQuotes))
+    if (confirm("¿Deseas restaurar los datos de simulación iniciales? Esto borrará tus registros actuales y cargará 5 cotizaciones de prueba.")) {
+      setQuotes(initialMockQuotes)
+      localStorage.setItem("huerta_dorada_quotes", JSON.stringify(initialMockQuotes))
     }
   }
 
