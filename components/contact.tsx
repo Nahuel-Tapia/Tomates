@@ -61,6 +61,26 @@ export function Contact() {
     
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000))
+
+    try {
+      const existingQuotesJson = localStorage.getItem("huerta_dorada_quotes")
+      const existingQuotes = existingQuotesJson ? JSON.parse(existingQuotesJson) : []
+      
+      const newQuote = {
+        id: typeof window !== "undefined" && window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : Math.random().toString(36).substring(2, 9),
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        type: formData.type,
+        message: formData.message,
+        date: new Date().toISOString(),
+        status: "pendiente",
+      }
+      
+      localStorage.setItem("huerta_dorada_quotes", JSON.stringify([newQuote, ...existingQuotes]))
+    } catch (err) {
+      console.error("Error saving quote to localStorage:", err)
+    }
     
     setIsSubmitting(false)
     setSubmitted(true)
